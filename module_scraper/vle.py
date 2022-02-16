@@ -59,6 +59,7 @@ class VLEWrapper:
         self._get_element(By.PARTIAL_LINK_TEXT, module).click()
         self.module = module.lower()
 
-    def module_announcements(self, module):
+    def goto_module_sidebar_link(self, module, entry_name):
         self.goto_module(module)
-        return self.driver.page_source
+        self._get_element(By.ID, "menuPuller").click()
+        self._get_element(By.PARTIAL_LINK_TEXT, entry_name).click()

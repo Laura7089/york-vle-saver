@@ -52,5 +52,5 @@ If you didn't give a config file argument, the script will look at '{DEFAULT_CON
     # Get content
     for module in app_options["modules"]:
         if module["announcements"]:
-            saver.save(module["name"], "announcements",
-                       vle.module_announcements(module["name"]))
+            vle.goto_module_sidebar_link(module["name"], "Announcements")
+            saver.save(module["name"], "announcements", vle.driver.page_source)
