@@ -77,7 +77,7 @@ If you didn't give a config file argument, the script will look at '{DEFAULT_CON
     # Setup the VLE infra
     vle = VLEWrapper(driver)
     vle.login(**app_options["vle"]["login"])
-    saver = Saver(app_options["paths"]["data"], app_options["paths"])
+    saver = Saver(app_options["paths"]["data"])
 
     # Get content
     for module in app_options["modules"]:

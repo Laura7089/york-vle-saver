@@ -88,6 +88,6 @@ class VLEWrapper:
                 return
 
         self.logger.error(
-            "Couldn't find a link in the sidebar of '%s' called '%s'!",
-            self.module, entry_name)
+            "Couldn't find a link in the sidebar of '%s' called '%s'!", module,
+            entry_name)
         raise ValueError
