@@ -29,6 +29,7 @@ class VLEWrapper:
             self.driver, self.timeout).until(lambda d: d.find_elements(*args))
 
     def login(self, username, password):
+        # TODO: check if we actually need to login
         self.driver.get(VLE_BASE)
 
         # Yorkshare forwarding
@@ -62,4 +63,15 @@ class VLEWrapper:
     def goto_module_sidebar_link(self, module, entry_name):
         self.goto_module(module)
         self._get_element(By.ID, "menuPuller").click()
-        self._get_element(By.PARTIAL_LINK_TEXT, entry_name).click()
+        sidebar_elements = self._get_element(By.ID,
+                                             "courseMenuPalette_contents")
+        # We're safe to use the naked find_elements here because we've guaranteed the sidebar has loaded above (hopefully)
+        for element in sidebar_elements.find_elements(By.TAG_NAME, "a"):
+            link_span = element.find_element(By.TAG_NAME, "span")
+            print(link_span.get_attribute("title"))
+            if link_span.get_attribute("title") == entry_name:
+                element.click()
+                return
+
+        raise ValueError(
+            f"Couldn't find a link in the sidebar called {entry_name}!")
