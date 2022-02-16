@@ -1,0 +1,15 @@
+[vle.login]
+username = "myusername"
+password = "mypassword"
+
+[paths]
+data = "data"
+announcements = "announcements_{date}_{module}.html"
+
+[[modules]]
+name = "module1"
+announcements = true
+
+[[modules]]
+name = "module2"
+announcements = true

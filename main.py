@@ -17,7 +17,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument("-c",
                     "--config-file",
                     type=str,
-                    help="Config file path",
+                    help="Config file path; see upstream for an example",
                     default=DEFAULT_CONFIG)
 parser.add_argument("-H",
                     "--headless",
