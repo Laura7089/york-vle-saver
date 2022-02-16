@@ -83,5 +83,8 @@ If you didn't give a config file argument, the script will look at '{DEFAULT_CON
     for module in app_options["modules"]:
         for target in module["targets"]:
             logging.info("Getting page {} from {}...", target["name"], module["name"])
-            vle.goto_module_sidebar_link(module["name"], target["name"])
+            try:
+                vle.goto_module_sidebar_link(module["name"], target["name"])
+            except ValueError:
+                continue
             saver.save(module["name"], target["name"], vle.driver.page_source)

@@ -19,8 +19,10 @@ class VLEWrapper:
         self.timeout = timeout
         self.module = None
         self.logger = logging.getLogger("vle_getter.vle")
+        self.logger.debug("VLE Wrapper initialised")
 
     def __del__(self):
+        self.logger.debug("VLE Wrapper closing...")
         self.driver.quit()
 
     def _get_element(self, *args):
@@ -32,6 +34,8 @@ class VLEWrapper:
             self.driver, self.timeout).until(lambda d: d.find_elements(*args))
 
     def login(self, username, password):
+        self.logger.info("Logging into Yorkshare...")
+
         # TODO: check if we actually need to login
         self.driver.get(VLE_BASE)
 
@@ -40,6 +44,7 @@ class VLEWrapper:
         yorkshare_button.click()
 
         # York shib auth
+        # TODO: handle bad credentials
         username_box = self._get_element(By.ID, "username")
         password_box = self.driver.find_element(By.ID, "password")
         username_box.send_keys(username)
@@ -55,9 +60,11 @@ class VLEWrapper:
         except TimeoutException:
             pass
 
+        self.logger.info("Logged in succesfully!")
         self.logged_in = True
 
     def goto_module(self, module):
+        self.logger.debug("Navigating to module '%s'", module)
         # TODO: only search within the modules pane
         assert self.logged_in
         self.driver.get(VLE_BASE)
@@ -80,5 +87,7 @@ class VLEWrapper:
                 element.click()
                 return
 
-        raise ValueError(
-            f"Couldn't find a link in the sidebar called {entry_name}!")
+        self.logger.error(
+            "Couldn't find a link in the sidebar of '%s' called '%s'!",
+            self.module, entry_name)
+        raise ValueError
