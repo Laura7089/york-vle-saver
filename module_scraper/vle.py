@@ -53,14 +53,12 @@ class VLEWrapper:
 
         self.logged_in = True
 
-    def get_modules(self, search_string):
-        assert self.logged_in
-        self.driver.get(VLE_BASE)
-        self.module = None
-        return self._get_elements(By.PARTIAL_LINK_TEXT, search_string)
-
     def goto_module(self, module):
         assert self.logged_in
         self.driver.get(VLE_BASE)
-        self.get_modules(module)[0].click()
+        self._get_element(By.PARTIAL_LINK_TEXT, module).click()
         self.module = module.lower()
+
+    def module_announcements(self, module):
+        self.goto_module(module)
+        return self.driver.page_source

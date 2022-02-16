@@ -159,3 +159,4 @@ cython_debug/
 
 *.log
 config.toml
+data
