@@ -1,3 +1,5 @@
+import logging
+
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -16,6 +18,7 @@ class VLEWrapper:
         self.logged_in = False
         self.timeout = timeout
         self.module = None
+        self.logger = logging.getLogger("vle_getter.vle")
 
     def __del__(self):
         self.driver.quit()
@@ -55,6 +58,7 @@ class VLEWrapper:
         self.logged_in = True
 
     def goto_module(self, module):
+        # TODO: only search within the modules pane
         assert self.logged_in
         self.driver.get(VLE_BASE)
         self._get_element(By.PARTIAL_LINK_TEXT, module).click()
@@ -68,8 +72,11 @@ class VLEWrapper:
         # We're safe to use the naked find_elements here because we've guaranteed the sidebar has loaded above (hopefully)
         for element in sidebar_elements.find_elements(By.TAG_NAME, "a"):
             link_span = element.find_element(By.TAG_NAME, "span")
-            print(link_span.get_attribute("title"))
-            if link_span.get_attribute("title") == entry_name:
+            span_title = link_span.get_attribute("title")
+            self.logger.debug("Examining '%s' sidebar entry in module '%s'",
+                              span_title, module)
+            if span_title == entry_name:
+                self.logger.debug("Found correct sidebar entry, clicking...")
                 element.click()
                 return
 

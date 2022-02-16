@@ -1,6 +1,8 @@
 import datetime
 import os
 
+from . import util
+
 
 class Saver:
 
@@ -9,14 +11,17 @@ class Saver:
             self.data = data
             self.paths = paths
 
-    def save(self, module_name, path_type, source):
-        module_path = os.path.join(self.data, module_name.lower())
+    def save(self, module_name, target_name, source):
+        # Create directories
+        module_path = os.path.join(self.data, util.to_key(module_name))
         if not os.path.exists(module_path):
             os.mkdir(module_path)
+        target_path = os.path.join(module_path, util.to_key(module_name))
+        if not os.path.exists(target_path):
+            os.mkdir(target_path)
 
         date = datetime.datetime.now().time()
-        path = os.path.join(
-            module_path, self.paths[path_type].format(date=date,
-                                                      module=module_name))
+        path = os.path.join(target_path, f"{date}.html")
+
         with open(path, "wt") as source_file:
             source_file.write(source)
