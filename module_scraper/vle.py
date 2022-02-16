@@ -17,7 +17,6 @@ class VLEWrapper:
         self.driver = driver
         self.logged_in = False
         self.timeout = timeout
-        self.module = None
         self.logger = logging.getLogger("vle_getter.vle")
         self.logger.debug("VLE Wrapper initialised")
 
@@ -37,14 +36,17 @@ class VLEWrapper:
         self.logger.info("Logging into Yorkshare...")
 
         # TODO: check if we actually need to login
+        self.logger.debug("Navigating to '%s'...", VLE_BASE)
         self.driver.get(VLE_BASE)
 
         # Yorkshare forwarding
+        self.logger.debug("Clicking through to Yorkshare...")
         yorkshare_button = self._get_element(By.XPATH, YORKSHARE_BUTTON_XPATH)
         yorkshare_button.click()
 
         # York shib auth
         # TODO: handle bad credentials
+        self.logger.debug("Trying to log into Yorkshare...")
         username_box = self._get_element(By.ID, "username")
         password_box = self.driver.find_element(By.ID, "password")
         username_box.send_keys(username)
@@ -54,11 +56,12 @@ class VLEWrapper:
 
         # Yorkshare forwarding again if we need it
         try:
+            self.logger.debug("Clicking the Yorkshare button again...")
             yorkshare_button = self._get_element(By.XPATH,
                                                  YORKSHARE_BUTTON_XPATH)
             yorkshare_button.click()
         except TimeoutException:
-            pass
+            self.logger.debug("Second Yorkshare button not found, skipping...")
 
         self.logger.info("Logged in succesfully!")
         self.logged_in = True
@@ -66,10 +69,10 @@ class VLEWrapper:
     def goto_module(self, module):
         self.logger.debug("Navigating to module '%s'", module)
         # TODO: only search within the modules pane
+        # TODO: replace me with a log
         assert self.logged_in
         self.driver.get(VLE_BASE)
         self._get_element(By.PARTIAL_LINK_TEXT, module).click()
-        self.module = module.lower()
 
     def goto_module_sidebar_link(self, module, entry_name):
         self.goto_module(module)
