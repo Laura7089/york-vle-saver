@@ -8,8 +8,20 @@ announcements = "announcements_{date}_{module}.html"
 
 [[modules]]
 name = "module1"
-announcements = true
+targets = [
+    {
+        name = "Announcements",
+        files = false,
+        file_matcher = "",
+    }
+]
 
 [[modules]]
 name = "module2"
-announcements = true
+targets = [
+    {
+        name = "Lectures",
+        files = true,
+        file_matcher = ".*\.pdf",
+    }
+]
