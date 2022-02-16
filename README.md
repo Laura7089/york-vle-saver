@@ -4,6 +4,7 @@ A tool to try to download the entire Virtual Learning Environment module content
 
 ## Usage
 
+1. `pip install -r requirements.txt`
 1. Copy `config.example.toml` to a place of your choosing - the tool will look in `./config.toml` by default.
 1. See `python main.py --help`.
 
